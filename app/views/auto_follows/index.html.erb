@@ -1,0 +1,33 @@
+<h1>Listing auto_follows</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Follower</th>
+      <th>Followed</th>
+      <th>Follow back</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @auto_follows.each do |auto_follow| %>
+      <tr>
+        <td><%= auto_follow.account_id %></td>
+        <td><%= auto_follow.follower_id %></td>
+        <td><%= auto_follow.followed %></td>
+        <td><%= auto_follow.follow_back %></td>
+        <td><%= link_to 'Show', auto_follow %></td>
+        <td><%= link_to 'Edit', edit_auto_follow_path(auto_follow) %></td>
+        <td><%= link_to 'Destroy', auto_follow, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Auto follow', new_auto_follow_path %>

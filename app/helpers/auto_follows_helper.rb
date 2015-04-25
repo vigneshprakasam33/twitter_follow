@@ -1,0 +1,2 @@
+module AutoFollowsHelper
+end

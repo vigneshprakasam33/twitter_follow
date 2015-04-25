@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Account:</strong>
+  <%= @auto_follow.account_id %>
+</p>
+
+<p>
+  <strong>Follower:</strong>
+  <%= @auto_follow.follower_id %>
+</p>
+
+<p>
+  <strong>Followed:</strong>
+  <%= @auto_follow.followed %>
+</p>
+
+<p>
+  <strong>Follow back:</strong>
+  <%= @auto_follow.follow_back %>
+</p>
+
+<%= link_to 'Edit', edit_auto_follow_path(@auto_follow) %> |
+<%= link_to 'Back', auto_follows_path %>

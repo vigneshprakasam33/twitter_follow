@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Uid:</strong>
+  <%= @celebrity.uid %>
+</p>
+
+<p>
+  <strong>Handle:</strong>
+  <%= @celebrity.handle %>
+</p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @celebrity.category %>
+</p>
+
+<%= link_to 'Edit', edit_celebrity_path(@celebrity) %> |
+<%= link_to 'Back', celebrities_path %>

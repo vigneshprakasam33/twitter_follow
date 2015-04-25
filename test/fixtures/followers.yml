@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  uid: MyString
+  celebrity_id: 1
+  handle: MyString
+
+two:
+  uid: MyString
+  celebrity_id: 1
+  handle: MyString

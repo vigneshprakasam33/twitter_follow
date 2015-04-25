@@ -1,10 +1,20 @@
 Twitter::Application.routes.draw do
-  get "account/index"
+  resources :auto_follows
+
+  resources :followers
+
+  resources :celebrities
+
+  resources :accounts
+
+  get "accounts/auto_follow"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-   root 'account#index'
+   root 'accounts#index'
+
+  match "/delayed_job" => DelayedJobWeb, :anchor => false, via: [:get, :post]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

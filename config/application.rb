@@ -21,7 +21,7 @@ module Twitter
     # config.i18n.default_locale = :de
 
     #smooth_claire
-    $client = Twitter::REST::Client.new do |config|
+    $claire_client = Twitter::REST::Client.new do |config|
       config.consumer_key        = "6zEMTtOsh1FrUPaCRn34JEgA7"
       config.consumer_secret     = "PWsk0Sq7uCaNyurq8B3Jwchx9LS964vmuzhRTp6TtfzX9FFP7S"
       config.access_token        = "3193536466-wabyqg3GmuMhjELM5zlCttKJ1gIH6Hl0rWZOk2g"
@@ -35,6 +35,14 @@ module Twitter
     #  config.access_token        = "85294852-MC6yZcqLnqlExKz4qhLZL7VYL8Ez33Jn5TU9S8yPc"
     #  config.access_token_secret = "gOjIYHjK5dWFsPfF6RElYOcpzPBlZLAjXJ5hKHwj41kCm"
     #end
+
+  #  auto attend
+    $aa_client = Twitter::REST::Client.new do |config|
+      config.consumer_key        = "VcIWuB5KjBuVe4a6Guuy6wOFF"
+      config.consumer_secret     = "OhhaHaRG5y0e5md3Ci3wcnX6aQNDm4Qm8k604aDL0gAE7Cbj6a"
+      config.access_token        = "2939896867-Cj5trbDzoa4BKOCsS5nP2zxijOeseBKfYGC2XOV"
+      config.access_token_secret = "56I5HhoNiClJASBQPIstnxbRxTM1VSILopduEHb8FG3Ti"
+    end
 
   end
 

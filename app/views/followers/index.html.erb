@@ -1,0 +1,31 @@
+<h1>Listing followers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Uid</th>
+      <th>Celebrity</th>
+      <th>Handle</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @followers.each do |follower| %>
+      <tr>
+        <td><%= follower.uid %></td>
+        <td><%= follower.celebrity_id %></td>
+        <td><%= follower.handle %></td>
+        <td><%= link_to 'Show', follower %></td>
+        <td><%= link_to 'Edit', edit_follower_path(follower) %></td>
+        <td><%= link_to 'Destroy', follower, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Follower', new_follower_path %>

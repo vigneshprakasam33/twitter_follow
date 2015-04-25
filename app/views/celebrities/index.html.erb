@@ -1,0 +1,31 @@
+<h1>Listing celebrities</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Uid</th>
+      <th>Handle</th>
+      <th>Category</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @celebrities.each do |celebrity| %>
+      <tr>
+        <td><%= celebrity.uid %></td>
+        <td><%= celebrity.handle %></td>
+        <td><%= celebrity.category %></td>
+        <td><%= link_to 'Show', celebrity %></td>
+        <td><%= link_to 'Edit', edit_celebrity_path(celebrity) %></td>
+        <td><%= link_to 'Destroy', celebrity, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Celebrity', new_celebrity_path %>
