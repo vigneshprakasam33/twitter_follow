@@ -16,6 +16,8 @@ Twitter::Application.routes.draw do
 
   match "/delayed_job" => DelayedJobWeb, :anchor => false, via: [:get, :post]
 
+  get "auth/twitter/callback" , to: "accounts#callback"
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

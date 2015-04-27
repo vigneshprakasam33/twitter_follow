@@ -1,10 +1,29 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: [:show, :edit, :update, :destroy, :auto_follow]
 
+
+  def callback
+     account = Account.from_omniauth(env["omniauth.auth"])
+     session[:user_id] = account.id
+    redirect_to root_url , :notice => "Signed in"
+  end
+
   # GET /accounts
   # GET /accounts.json
   def index
     @accounts = Account.all
+
+    if session[:user_id]
+      user = Account.find(session[:user_id])
+      client = Twitter::REST::Client.new do |config|
+        config.consumer_key        = "VcIWuB5KjBuVe4a6Guuy6wOFF"
+        config.consumer_secret     = "OhhaHaRG5y0e5md3Ci3wcnX6aQNDm4Qm8k604aDL0gAE7Cbj6a"
+        config.access_token        = user.access_token
+        config.access_token_secret = user.access_secret
+      end
+      #client.update("my app!")
+    end
+
 
     #user = $aa_client.user("autoattend")
     #logger.debug user.id
@@ -60,7 +79,7 @@ class AccountsController < ApplicationController
   # GET /accounts/1/edit
   def edit
     #initiate auto follow
-    @account.auto_follows.where(:followed => nil).first.follow_start
+    @account.auto_follows.where(:followed => nil , :inactive_user => nil).first.follow_start
     render "accounts/auto_follow"
   end
 

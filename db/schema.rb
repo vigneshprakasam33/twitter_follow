@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150422150238) do
+ActiveRecord::Schema.define(version: 20150427072600) do
 
   create_table "accounts", force: true do |t|
     t.string   "uid"
@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(version: 20150422150238) do
     t.string   "pass"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "access_token"
+    t.string   "access_secret"
   end
 
   create_table "auto_follows", force: true do |t|
@@ -28,6 +30,7 @@ ActiveRecord::Schema.define(version: 20150422150238) do
     t.boolean  "follow_back"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "inactive_user"
   end
 
   create_table "celebrities", force: true do |t|

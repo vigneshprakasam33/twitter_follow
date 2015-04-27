@@ -50,3 +50,5 @@ gem 'tweetstream'
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'
 gem 'daemons'
+
+gem 'omniauth-twitter'
