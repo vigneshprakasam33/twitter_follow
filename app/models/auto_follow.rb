@@ -82,7 +82,7 @@ class AutoFollow < ActiveRecord::Base
       end
 
       #just fyi
-      self.follower.update(:handle => user.handle)
+      #self.follower.update(:handle => user.handle)
 
       #follow
       client.follow(user, true)
