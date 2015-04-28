@@ -5,7 +5,8 @@
     <tr>
       <th>Uid</th>
       <th>Name</th>
-      <th>Pass</th>
+      <th>Followers</th>
+      <th>Following</th>
       <th></th>
       <th></th>
       <th></th>
@@ -14,10 +15,13 @@
 
   <tbody>
     <% @accounts.each do |account| %>
+        <% client = twitter_client(account)  %>
+        <% twitter_user = client.user(account.name)  %>
       <tr>
         <td><%= account.uid %></td>
         <td><%= account.name %></td>
-        <td><%= account.pass %></td>
+        <td><%= twitter_user.followers_count %></td>
+        <td><%#= twitter_user.following_count %></td>
         <td><%= link_to 'Scrape users', account %></td>
         <td><%= link_to 'Auto follow ', edit_account_path(account) %></td>
         <td>

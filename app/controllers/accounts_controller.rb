@@ -20,7 +20,7 @@ class AccountsController < ApplicationController
     @accounts = Account.all
     #after signing in
     if session[:user_id]
-      client = get_client
+      @client = get_client
       #client.update("my app!")
     end
 
