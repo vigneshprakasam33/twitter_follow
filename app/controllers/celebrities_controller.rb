@@ -69,6 +69,6 @@ class CelebritiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def celebrity_params
-      params.require(:celebrity).permit(:uid, :handle, :category)
+      params.require(:celebrity).permit(:uid, :handle, :category, :account_id)
     end
 end

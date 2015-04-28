@@ -23,6 +23,10 @@
     <%= f.label :category %><br>
     <%= f.text_field :category %>
   </div>
+    <div class="field">
+      <%= f.label :account %><br>
+      <%= f.select :account_id , Account.all.pluck( :name , :id)%>
+    </div>
   <div class="actions">
     <%= f.submit %>
   </div>
