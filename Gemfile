@@ -44,7 +44,7 @@ gem 'capistrano', group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'twitter'
+gem 'twitter' , :github => "sferik/twitter" , :branch => "proxy-support"
 gem 'tweetstream'
 
 gem 'delayed_job_active_record'

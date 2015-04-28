@@ -5,11 +5,18 @@ class AutoFollow < ActiveRecord::Base
 
   def unfollow
 
+    proxy = {
+        host: self.account.proxy,
+        port: 3128
+    }
+
+
     client = Twitter::REST::Client.new do |config|
       config.consumer_key = "VcIWuB5KjBuVe4a6Guuy6wOFF"
       config.consumer_secret = "OhhaHaRG5y0e5md3Ci3wcnX6aQNDm4Qm8k604aDL0gAE7Cbj6a"
       config.access_token = self.account.access_token
       config.access_token_secret = self.account.access_secret
+      config.proxy = proxy
     end
 
     begin
@@ -44,11 +51,16 @@ class AutoFollow < ActiveRecord::Base
 
   def follow_start
 
+    proxy = {
+        host: self.account.proxy,
+        port: 3128
+    }
     client = Twitter::REST::Client.new do |config|
       config.consumer_key = "VcIWuB5KjBuVe4a6Guuy6wOFF"
       config.consumer_secret = "OhhaHaRG5y0e5md3Ci3wcnX6aQNDm4Qm8k604aDL0gAE7Cbj6a"
       config.access_token = self.account.access_token
       config.access_token_secret = self.account.access_secret
+      config.proxy = proxy
     end
 
     begin

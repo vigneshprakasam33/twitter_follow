@@ -19,10 +19,10 @@ class AccountsController < ApplicationController
   def index
     @accounts = Account.all
     #after signing in
-    if session[:user_id]
-      @client = get_client
-      #client.update("my app!")
-    end
+    #if session[:user_id]
+    #  @client = get_client(current_user)
+    #  #client.update("my app!")
+    #end
 
 
     #user = $aa_client.user("autoattend")
@@ -33,9 +33,9 @@ class AccountsController < ApplicationController
   # GET /accounts/1.json
   def show
     begin
-      client = get_client
+      client = get_client(@account)
       #scrape from latest celeb
-      @celeb = current_user.celebrities.last
+      @celeb = @account.celebrities.last
       follower_ids = client.follower_ids(@celeb.handle)
 
       count = 0
@@ -137,14 +137,21 @@ class AccountsController < ApplicationController
     params.require(:account).permit(:uid, :name, :pass, :account_id)
   end
 
-  def get_client
-    user = Account.find(session[:user_id])
+  def get_client(user)
+    #user = Account.find(session[:user_id])
+    proxy = {
+        host: user.proxy,
+        port: 3128
+    }
+
     client = Twitter::REST::Client.new do |config|
       config.consumer_key = "VcIWuB5KjBuVe4a6Guuy6wOFF"
       config.consumer_secret = "OhhaHaRG5y0e5md3Ci3wcnX6aQNDm4Qm8k604aDL0gAE7Cbj6a"
       config.access_token = user.access_token
       config.access_token_secret = user.access_secret
+      config.proxy = proxy
     end
+
     client
   end
 end
