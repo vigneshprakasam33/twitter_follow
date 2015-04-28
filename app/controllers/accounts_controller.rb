@@ -1,26 +1,26 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: [:show, :edit, :update, :destroy, :auto_follow]
+  before_action :set_account, only: [:show, :edit, :update, :destroy, :unfollow]
 
 
   def callback
-     account = Account.from_omniauth(env["omniauth.auth"])
-     session[:user_id] = account.id
-    redirect_to root_url , :notice => "Signed in"
+    account = Account.from_omniauth(env["omniauth.auth"])
+    session[:user_id] = account.id
+    redirect_to root_url, :notice => "Signed in"
+  end
+
+
+  def signout
+    session[:user_id] = nil
+    redirect_to root_url, :notice => "Signed out"
   end
 
   # GET /accounts
   # GET /accounts.json
   def index
     @accounts = Account.all
-
+    #after signing in
     if session[:user_id]
-      user = Account.find(session[:user_id])
-      client = Twitter::REST::Client.new do |config|
-        config.consumer_key        = "VcIWuB5KjBuVe4a6Guuy6wOFF"
-        config.consumer_secret     = "OhhaHaRG5y0e5md3Ci3wcnX6aQNDm4Qm8k604aDL0gAE7Cbj6a"
-        config.access_token        = user.access_token
-        config.access_token_secret = user.access_secret
-      end
+      client = get_client
       #client.update("my app!")
     end
 
@@ -32,22 +32,21 @@ class AccountsController < ApplicationController
   # GET /accounts/1
   # GET /accounts/1.json
   def show
-
-
     begin
-      if @account.name == "smooth_claire"
-        @celeb = Celebrity.first
-        follower_ids = $smooth_client.follower_ids(@celeb.handle)
-      else
-        @celeb = Celebrity.find(2)
-        follower_ids = $aa_client.follower_ids(@celeb.handle)
-      end
+      client = get_client
+      #scrape from latest celeb
+      @celeb = current_user.celebrities.last
+      follower_ids = client.follower_ids(@celeb.handle)
 
       count = 0
+      all_followers = Follower.all.pluck(:uid)
       follower_ids.each do |f|
+        #make sure unique followers
+        next if all_followers.include? f
+
         follower = Follower.new(:uid => f)
         follower.save
-        AutoFollow.create(:account_id => @account.id , :follower_id => follower.id)
+        AutoFollow.create(:account_id => @account.id, :follower_id => follower.id)
         @celeb.followers << follower
         count = count + 1
         logger.debug count.to_s + " records"
@@ -65,11 +64,11 @@ class AccountsController < ApplicationController
   end
 
 
-  def auto_follow
-    #initiate auto follow
-    @account.auto_follows.where(:followed => nil).first.follow_start
+  def unfollow
+    #initiate un follow
+    @account.auto_follows.where(:followed => true).first.unfollow
+    render "accounts/auto_follow"
   end
-
 
   # GET /accounts/new
   def new
@@ -79,7 +78,7 @@ class AccountsController < ApplicationController
   # GET /accounts/1/edit
   def edit
     #initiate auto follow
-    @account.auto_follows.where(:followed => nil , :inactive_user => nil).first.follow_start
+    @account.auto_follows.where(:followed => nil, :inactive_user => nil).first.follow_start
     render "accounts/auto_follow"
   end
 
@@ -126,11 +125,26 @@ class AccountsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_account
-    @account = Account.find(params[:id])
+    if params[:id]
+      @account = Account.find(params[:id])
+    elsif params[:account_id]
+      @account = Account.find(params[:account_id])
+    end
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def account_params
-    params.require(:account).permit(:uid, :name, :pass)
+    params.require(:account).permit(:uid, :name, :pass, :account_id)
+  end
+
+  def get_client
+    user = Account.find(session[:user_id])
+    client = Twitter::REST::Client.new do |config|
+      config.consumer_key = "VcIWuB5KjBuVe4a6Guuy6wOFF"
+      config.consumer_secret = "OhhaHaRG5y0e5md3Ci3wcnX6aQNDm4Qm8k604aDL0gAE7Cbj6a"
+      config.access_token = user.access_token
+      config.access_token_secret = user.access_secret
+    end
+    client
   end
 end

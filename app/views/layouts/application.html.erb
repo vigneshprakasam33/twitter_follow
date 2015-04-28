@@ -8,7 +8,11 @@
 </head>
 <body>
 
-<%= link_to "Sign in" , "/auth/twitter" %>
+<% if current_user.blank? %>
+ <%= link_to "Sign in" , "/auth/twitter" %>
+<% else %>
+<%= "Welcome " + current_user.name + ","%> <%= link_to "Signout" , account_signout_path(:account_id => current_user.id) %>
+<% end  %>
 
 <%= yield %>
 

@@ -5,9 +5,12 @@ Twitter::Application.routes.draw do
 
   resources :celebrities
 
-  resources :accounts
+  resources :accounts do
+    get :signout
+    get :unfollow
+  end
 
-  get "accounts/auto_follow"
+  #match "accounts/unfollow/:id" , :controller => "accounts", :action => "unfollow" , via: :get
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
