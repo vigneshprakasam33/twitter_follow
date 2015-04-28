@@ -55,6 +55,7 @@ class AutoFollow < ActiveRecord::Base
       if self.follower and self.follower.uid
         user = client.user(self.follower.uid.to_i)
       else
+        self.update(:inactive_user => true)
         #  bogus user
         return self.account.auto_follows.where(:followed => nil, :inactive_user => nil).first.follow_start
       end
