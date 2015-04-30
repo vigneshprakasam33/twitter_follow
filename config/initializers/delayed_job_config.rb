@@ -6,8 +6,8 @@ silence_warnings do
   Delayed::Job.const_set("MAX_ATTEMPTS", 3)
 end
 
-5.times do |n|
-  worker = Delayed::Worker.new
-  worker.name = 'worker-' + n.to_s
-  worker.start
-end
+#3.times do |n|
+#  worker = Delayed::Worker.new
+#  worker.name = 'worker-' + n.to_s
+#  worker.start
+#end
