@@ -1,6 +1,6 @@
 module AccountsHelper
   def twitter_client(user)
-    if Rails.env == "production"
+    if Rails.env == "staging"
       proxy = {
           host: user.proxy,
           port: 3128
