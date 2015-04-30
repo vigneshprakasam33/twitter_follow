@@ -5,7 +5,7 @@ class AutoFollow < ActiveRecord::Base
 
   def unfollow
 
-    if Rails.env == "staging"
+    if Rails.env == "production"
       proxy = {
           host: self.account.proxy,
           port: 3128
@@ -54,7 +54,7 @@ class AutoFollow < ActiveRecord::Base
 
   def follow_start
 
-    if Rails.env == "staging"
+    if Rails.env == "production"
       proxy = {
           host: self.account.proxy,
           port: 3128
