@@ -7,6 +7,7 @@
       <th>Name</th>
       <th>Followers</th>
       <th>Following</th>
+      <th>Celebrity</th>
       <th></th>
       <th></th>
       <th></th>
@@ -22,6 +23,7 @@
         <td><%= account.name %></td>
         <td><%= twitter_user.followers_count %></td>
         <td><%= twitter_user.friends_count %></td>
+        <td><%= account.celebrities.last.handle %></td>
         <td><%= link_to 'Scrape users', account %></td>
         <td><%= link_to 'Auto follow ', edit_account_path(account) %></td>
         <td>
