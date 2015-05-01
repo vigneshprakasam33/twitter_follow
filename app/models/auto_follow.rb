@@ -107,7 +107,7 @@ class AutoFollow < ActiveRecord::Base
     self.update(:followed => true)
 
     #next job
-    jobs = self.account.auto_follows.where(:followed => nil)
+    jobs = self.account.auto_follows.where(:followed => nil , :inactive_user => nil)
     if jobs.count > 0
       jobs.first.delay(:run_at => Time.now + 1.minute).follow_start
     end
