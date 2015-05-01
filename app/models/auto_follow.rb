@@ -77,7 +77,7 @@ class AutoFollow < ActiveRecord::Base
         return self.account.auto_follows.where(:followed => nil, :inactive_user => nil).first.follow_start
       end
 
-      if user.followers_count < 100 or user.tweets_count < 100
+      if user.followers_count < 100 #or user.tweets_count < 100
 
         logger.debug "======INACTIVE USER======>" + user.followers_count.to_s + " , " + user.tweets_count.to_s
 
