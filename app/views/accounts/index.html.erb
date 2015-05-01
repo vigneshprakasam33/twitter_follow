@@ -3,11 +3,13 @@
 <table>
   <thead>
     <tr>
-      <th>Uid</th>
+      <th>SNo</th>
+      <th>Account id</th>
       <th>Name</th>
       <th>Followers</th>
       <th>Following</th>
       <th>Celebrity</th>
+      <th>Proxy</th>
       <th></th>
       <th></th>
       <th></th>
@@ -15,17 +17,21 @@
   </thead>
 
   <tbody>
+  <% count = 0 %>
     <% @accounts.each do |account| %>
+        <% count = count + 1  %>
         <% client = twitter_client(account)  %>
         <% twitter_user = client.user(account.name)  %>
       <tr>
-        <td><%= account.uid %></td>
+        <td><%= count %></td>
+        <td><%= account.id %></td>
         <td><%= account.name %></td>
         <td><%= twitter_user.followers_count %></td>
         <td><%= twitter_user.friends_count %></td>
         <td><%= account.celebrities.last.handle %></td>
         <td><%= link_to 'Scrape users', account %></td>
         <td><%= link_to 'Auto follow ', edit_account_path(account) %></td>
+        <td><%= account.proxy %></td>
         <td>
         <%#= link_to 'Destroy', account, method: :delete, data: { confirm: 'Are you sure?' } %>
           <%= link_to "Unfollow" , account_unfollow_path(:account_id => account.id ) %>
