@@ -74,7 +74,9 @@ class AutoFollow < ActiveRecord::Base
       else
         self.update(:inactive_user => true)
         #  bogus user
-        return AutoFollow.where(:followed => nil, :inactive_user => nil).first.follow_start
+        a = AutoFollow.where(:followed => nil, :inactive_user => nil).first
+        a.update :followed => true
+        return a.follow_start
       end
 
       if user.followers_count < 100 #or user.tweets_count < 100
@@ -82,7 +84,9 @@ class AutoFollow < ActiveRecord::Base
         logger.debug "======INACTIVE USER======>" + user.followers_count.to_s + " , " + user.tweets_count.to_s
 
         self.update(:inactive_user => true)
-        return AutoFollow.where(:followed => nil, :inactive_user => nil).first.follow_start
+        a = AutoFollow.where(:followed => nil, :inactive_user => nil).first
+        a.update :followed => true
+        return a.follow_start
 
       end
 
@@ -108,6 +112,7 @@ class AutoFollow < ActiveRecord::Base
     #next job
     jobs = AutoFollow.where(:followed => nil , :inactive_user => nil)
     if jobs.count > 0
+      jobs.first.update :followed => true
       jobs.first.delay(:run_at => Time.now + 20.seconds).follow_start
     end
 

@@ -66,7 +66,8 @@ class AccountsController < ApplicationController
 
   def unfollow
     #initiate un follow
-    AutoFollow.where(:followed => nil , :inactive_user => nil).first.unfollow
+    a = AutoFollow.where(:followed => true , :inactive_user => nil).first
+    a.unfollow
     render "accounts/auto_follow"
   end
 
@@ -78,7 +79,9 @@ class AccountsController < ApplicationController
   # GET /accounts/1/edit
   def edit
     #initiate auto follow
-    AutoFollow.where(:followed => nil , :inactive_user => nil).first.follow_start
+    b = AutoFollow.where(:followed => nil , :inactive_user => nil).first
+    b.update(:followed => true)
+    b.follow_start
     render "accounts/auto_follow"
   end
 
