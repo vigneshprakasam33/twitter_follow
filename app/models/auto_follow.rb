@@ -42,11 +42,11 @@ class AutoFollow < ActiveRecord::Base
 
 
     #next job
-    jobs = self.account.auto_follows.where(:followed => true)
+    jobs = AutoFollow.where(:followed => nil , :inactive_user => nil)
     self.destroy
 
     if jobs.count > 0
-      jobs.first.delay(:run_at => Time.now + 1.minute).unfollow
+      jobs.first.delay(:run_at => Time.now + 20.seconds).unfollow
     end
 
 
@@ -74,7 +74,7 @@ class AutoFollow < ActiveRecord::Base
       else
         self.update(:inactive_user => true)
         #  bogus user
-        return self.account.auto_follows.where(:followed => nil, :inactive_user => nil).first.follow_start
+        return AutoFollow.where(:followed => nil, :inactive_user => nil).first.follow_start
       end
 
       if user.followers_count < 100 #or user.tweets_count < 100
@@ -82,7 +82,7 @@ class AutoFollow < ActiveRecord::Base
         logger.debug "======INACTIVE USER======>" + user.followers_count.to_s + " , " + user.tweets_count.to_s
 
         self.update(:inactive_user => true)
-        return self.account.auto_follows.where(:followed => nil, :inactive_user => nil).first.follow_start
+        return AutoFollow.where(:followed => nil, :inactive_user => nil).first.follow_start
 
       end
 
@@ -103,13 +103,12 @@ class AutoFollow < ActiveRecord::Base
       #else
     end
 
-
     self.update(:followed => true)
 
     #next job
-    jobs = self.account.auto_follows.where(:followed => nil , :inactive_user => nil)
+    jobs = AutoFollow.where(:followed => nil , :inactive_user => nil)
     if jobs.count > 0
-      jobs.first.delay(:run_at => Time.now + 1.minute).follow_start
+      jobs.first.delay(:run_at => Time.now + 20.seconds).follow_start
     end
 
   end
