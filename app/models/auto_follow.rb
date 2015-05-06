@@ -3,11 +3,11 @@ class AutoFollow < ActiveRecord::Base
   belongs_to :account
 
 
-  def unfollow
+  def unfollow(acc)
 
-    if Rails.env != "development" and !self.account.proxy.blank?
+    if Rails.env != "development" and !acc.proxy.blank?
       proxy = {
-          host: self.account.proxy,
+          host: acc.proxy,
           port: 3128
       }
     end
@@ -17,8 +17,8 @@ class AutoFollow < ActiveRecord::Base
     client = Twitter::REST::Client.new do |config|
       config.consumer_key = "VcIWuB5KjBuVe4a6Guuy6wOFF"
       config.consumer_secret = "OhhaHaRG5y0e5md3Ci3wcnX6aQNDm4Qm8k604aDL0gAE7Cbj6a"
-      config.access_token = self.account.access_token
-      config.access_token_secret = self.account.access_secret
+      config.access_token = acc.access_token
+      config.access_token_secret = acc.access_secret
       config.proxy = proxy if proxy
     end
 
@@ -46,25 +46,25 @@ class AutoFollow < ActiveRecord::Base
     self.destroy
 
     if jobs.count > 0
-      jobs.first.delay(:run_at => Time.now + 20.seconds).unfollow
+      jobs.first.delay(:run_at => Time.now + 20.seconds).unfollow(acc)
     end
 
 
   end
 
-  def follow_start
+  def follow_start(acc)
 
-    if Rails.env != "development" and !self.account.proxy.blank?
+    if Rails.env != "development" and !acc.proxy.blank?
       proxy = {
-          host: self.account.proxy,
+          host: acc.proxy,
           port: 3128
       }
     end
     client = Twitter::REST::Client.new do |config|
       config.consumer_key = "VcIWuB5KjBuVe4a6Guuy6wOFF"
       config.consumer_secret = "OhhaHaRG5y0e5md3Ci3wcnX6aQNDm4Qm8k604aDL0gAE7Cbj6a"
-      config.access_token = self.account.access_token
-      config.access_token_secret = self.account.access_secret
+      config.access_token = acc.access_token
+      config.access_token_secret = acc.access_secret
       config.proxy = proxy   if proxy
     end
 
@@ -76,7 +76,7 @@ class AutoFollow < ActiveRecord::Base
         #  bogus user
         a = AutoFollow.where(:followed => nil, :inactive_user => nil).first
         a.update :followed => true
-        return a.follow_start
+        return a.follow_start(acc)
       end
 
       if user.followers_count < 100 #or user.tweets_count < 100
@@ -86,7 +86,7 @@ class AutoFollow < ActiveRecord::Base
         self.update(:inactive_user => true)
         a = AutoFollow.where(:followed => nil, :inactive_user => nil).first
         a.update :followed => true
-        return a.follow_start
+        return a.follow_start(acc)
 
       end
 
@@ -113,7 +113,7 @@ class AutoFollow < ActiveRecord::Base
     jobs = AutoFollow.where(:followed => nil , :inactive_user => nil)
     if jobs.count > 0
       jobs.first.update :followed => true
-      jobs.first.delay(:run_at => Time.now + 20.seconds).follow_start
+      jobs.first.delay(:run_at => Time.now + 20.seconds).follow_start(acc)
     end
 
   end

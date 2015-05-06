@@ -46,7 +46,7 @@ class AccountsController < ApplicationController
 
         follower = Follower.new(:uid => f)
         follower.save
-        AutoFollow.create(:account_id => @account.id, :follower_id => follower.id)
+        AutoFollow.create(:follower_id => follower.id)
         @celeb.followers << follower
         count = count + 1
         logger.debug count.to_s + " records"
@@ -67,7 +67,7 @@ class AccountsController < ApplicationController
   def unfollow
     #initiate un follow
     a = AutoFollow.where(:followed => true , :inactive_user => nil).first
-    a.unfollow
+    a.unfollow(@account)
     render "accounts/auto_follow"
   end
 
@@ -81,7 +81,7 @@ class AccountsController < ApplicationController
     #initiate auto follow
     b = AutoFollow.where(:followed => nil , :inactive_user => nil).first
     b.update(:followed => true)
-    b.follow_start
+    b.follow_start(@account)
     render "accounts/auto_follow"
   end
 
