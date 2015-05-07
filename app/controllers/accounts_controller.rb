@@ -66,7 +66,7 @@ class AccountsController < ApplicationController
 
   def unfollow
     #initiate un follow
-    a = AutoFollow.where(:followed => true , :inactive_user => nil).first
+    a = @account.auto_follows.where(:followed => true , :inactive_user => nil ).first
     a.unfollow(@account)
     render "accounts/auto_follow"
   end
