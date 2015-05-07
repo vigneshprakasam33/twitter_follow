@@ -75,7 +75,7 @@ class AutoFollow < ActiveRecord::Base
         self.update(:inactive_user => true)
         #  bogus user
         a = AutoFollow.where(:followed => nil, :inactive_user => nil).first
-        a.update :followed => true
+        a.update(:followed => true, :account_id => acc.id)
         return a.follow_start(acc)
       end
 
@@ -85,7 +85,7 @@ class AutoFollow < ActiveRecord::Base
 
         self.update(:inactive_user => true)
         a = AutoFollow.where(:followed => nil, :inactive_user => nil).first
-        a.update :followed => true
+        a.update(:followed => true, :account_id => acc.id)
         return a.follow_start(acc)
 
       end
@@ -107,7 +107,7 @@ class AutoFollow < ActiveRecord::Base
       #else
     end
 
-    self.update(:followed => true)
+    self.update(:followed => true , :account_id => acc.id)
 
     #next job
     jobs = AutoFollow.where(:followed => nil , :inactive_user => nil)
