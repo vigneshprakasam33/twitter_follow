@@ -42,7 +42,7 @@ class AutoFollow < ActiveRecord::Base
 
 
     #next job
-    jobs = self.account.auto_follows.where(:followed => nil , :inactive_user => nil)
+    jobs = self.account.auto_follows.where(:followed => true , :inactive_user => nil)
     self.destroy
 
     if jobs.count > 0
