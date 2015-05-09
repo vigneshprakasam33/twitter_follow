@@ -40,9 +40,9 @@ class AccountsController < ApplicationController
       cursor = "9999"
       count = 0
       follower_ids = []
-      while cursor > 0 do
+      while cursor.to_i > 0 do
         follower_ids = client.follower_ids(@celeb.handle, {:cursor => cursor})
-        if celeb.handle == "GettyImages" and count < 3
+        if @celeb.handle == "GettyImages" and count < 3
           count += 1
           cursor = follower_ids.next_cursor
           next
