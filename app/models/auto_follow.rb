@@ -2,6 +2,7 @@ class AutoFollow < ActiveRecord::Base
   belongs_to :follower
   belongs_to :account
 
+  validates_uniqueness_of :follower_id
 
   def unfollow(acc)
 
