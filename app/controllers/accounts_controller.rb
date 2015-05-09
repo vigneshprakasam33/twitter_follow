@@ -37,11 +37,16 @@ class AccountsController < ApplicationController
       #scrape from latest celeb
       @celeb = @account.celebrities.last
 
-      cursor = "-1"
+      cursor = "9999"
       count = 0
       follower_ids = []
-      while cursor != 0 do
+      while cursor > 0 do
         follower_ids = client.follower_ids(@celeb.handle, {:cursor => cursor})
+        if celeb.handle == "GettyImages" and count < 3
+          count += 1
+          cursor = follower_ids.next_cursor
+          next
+        end
         all_followers = Follower.all.pluck(:uid)
         follower_ids.each do |f|
           #make sure unique followers
@@ -68,7 +73,12 @@ class AccountsController < ApplicationController
       # retry any sooner, it will almost certainly fail with the same exception.
       sleep error.rate_limit.reset_in + 1
       retry
+    rescue => error
+
+      logger.debug "error================>" + error.message
     end
+
+    logger.debug "finished==========>"
 
   end
 
