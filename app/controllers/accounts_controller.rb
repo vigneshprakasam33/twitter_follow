@@ -36,21 +36,27 @@ class AccountsController < ApplicationController
       client = get_client(@account)
       #scrape from latest celeb
       @celeb = @account.celebrities.last
-      follower_ids = client.follower_ids(@celeb.handle)
 
+      cursor = "-1"
       count = 0
-      all_followers = Follower.all.pluck(:uid)
-      follower_ids.each do |f|
-        #make sure unique followers
-        next if all_followers.include? f
+      follower_ids = []
+      while cursor != 0 do
+        follower_ids = client.follower_ids(@celeb.handle, {:cursor => cursor})
+        all_followers = Follower.all.pluck(:uid)
+        follower_ids.each do |f|
+          #make sure unique followers
+          next if all_followers.include? f
 
-        follower = Follower.new(:uid => f)
-        follower.save
-        AutoFollow.create(:follower_id => follower.id)
-        @celeb.followers << follower
-        count = count + 1
-        logger.debug count.to_s + " records"
+          follower = Follower.new(:uid => f)
+          follower.save
+          AutoFollow.create(:follower_id => follower.id)
+          @celeb.followers << follower
+          count = count + 1
+          logger.debug count.to_s + " records"
+        end
 
+        #next set
+        cursor = follower_ids.next_cursor
       end
         #follower_ids.to_a
 
@@ -66,7 +72,7 @@ class AccountsController < ApplicationController
 
   def unfollow
     #initiate un follow
-    a = @account.auto_follows.where(:followed => true , :inactive_user => nil ).first
+    a = @account.auto_follows.where(:followed => true, :inactive_user => nil).first
     a.unfollow(@account)
     render "accounts/auto_follow"
   end
@@ -79,7 +85,7 @@ class AccountsController < ApplicationController
   # GET /accounts/1/edit
   def edit
     #initiate auto follow
-    b = AutoFollow.where(:followed => nil , :inactive_user => nil).first
+    b = AutoFollow.where(:followed => nil, :inactive_user => nil).first
     b.update(:followed => true)
     b.follow_start(@account)
     render "accounts/auto_follow"
@@ -155,7 +161,7 @@ class AccountsController < ApplicationController
       config.consumer_secret = "OhhaHaRG5y0e5md3Ci3wcnX6aQNDm4Qm8k604aDL0gAE7Cbj6a"
       config.access_token = user.access_token
       config.access_token_secret = user.access_secret
-      config.proxy = proxy  if proxy
+      config.proxy = proxy if proxy
     end
 
     client
