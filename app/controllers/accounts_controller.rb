@@ -56,11 +56,14 @@ class AccountsController < ApplicationController
         end
 
         #next set
+        logger.debug "NEXT SET==================>"
         cursor = follower_ids.next_cursor
       end
         #follower_ids.to_a
 
     rescue Twitter::Error::TooManyRequests => error
+
+      logger.debug "RATE EXCEEDED================>"
       # NOTE: Your process could go to sleep for up to 15 minutes but if you
       # retry any sooner, it will almost certainly fail with the same exception.
       sleep error.rate_limit.reset_in + 1
