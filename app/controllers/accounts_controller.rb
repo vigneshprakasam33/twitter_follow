@@ -37,10 +37,10 @@ class AccountsController < ApplicationController
       #scrape from latest celeb
       @celeb = @account.celebrities.last
 
-      cursor = "9999"
+      cursor = -1
       count = 0
       follower_ids = []
-      while cursor.to_i > 0 do
+      while cursor.to_i != 0 do
         follower_ids = client.follower_ids(@celeb.handle, {:cursor => cursor})
         if @celeb.handle == "GettyImages" and count < 3
           count += 1

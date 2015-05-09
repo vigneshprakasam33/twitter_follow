@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150427072600) do
+ActiveRecord::Schema.define(version: 20150509121155) do
 
   create_table "accounts", force: true do |t|
     t.string   "uid"
@@ -21,6 +21,15 @@ ActiveRecord::Schema.define(version: 20150427072600) do
     t.datetime "updated_at"
     t.string   "access_token"
     t.string   "access_secret"
+    t.string   "proxy",         default: "173.44.219.155"
+  end
+
+  create_table "accounts_tweets", force: true do |t|
+    t.integer  "account_id"
+    t.integer  "tweet_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "posted"
   end
 
   create_table "auto_follows", force: true do |t|
@@ -33,12 +42,17 @@ ActiveRecord::Schema.define(version: 20150427072600) do
     t.boolean  "inactive_user"
   end
 
+  add_index "auto_follows", ["account_id"], name: "account_index", using: :btree
+  add_index "auto_follows", ["followed", "inactive_user"], name: "next_user_index", using: :btree
+  add_index "auto_follows", ["follower_id"], name: "follower_index", using: :btree
+
   create_table "celebrities", force: true do |t|
     t.string   "uid"
     t.string   "handle"
     t.string   "category"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "account_id"
   end
 
   create_table "delayed_jobs", force: true do |t|
@@ -61,6 +75,13 @@ ActiveRecord::Schema.define(version: 20150427072600) do
     t.string   "uid"
     t.integer  "celebrity_id"
     t.string   "handle"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tweets", force: true do |t|
+    t.text     "status"
+    t.string   "picture"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

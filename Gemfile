@@ -52,3 +52,5 @@ gem 'delayed_job_web'
 gem 'daemons'
 
 gem 'omniauth-twitter'
+
+gem 'carrierwave'

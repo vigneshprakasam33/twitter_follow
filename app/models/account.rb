@@ -1,6 +1,9 @@
 class Account < ActiveRecord::Base
   has_many :auto_follows
   has_many :celebrities
+  has_many :accounts_tweets
+  has_many :tweets , :through => :accounts_tweets
+
 
   def self.from_omniauth(auth)
     where(auth.slice("uid")).first || create_from_omniauth(auth)
