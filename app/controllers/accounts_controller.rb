@@ -44,7 +44,7 @@ class AccountsController < ApplicationController
         follower_ids = client.follower_ids(@celeb.handle, {:cursor => cursor})
         if @celeb.handle == "GettyImages" and count < 3
           count += 1
-          cursor = follower_ids.next_cursor
+          cursor = follower_ids.send(:next_cursor)
           next
         end
         all_followers = Follower.all.pluck(:uid)
@@ -62,7 +62,7 @@ class AccountsController < ApplicationController
 
         #next set
         logger.debug "NEXT SET==================>"
-        cursor = follower_ids.next_cursor
+        cursor = follower_ids.send(:next_cursor)
       end
         #follower_ids.to_a
 
