@@ -28,7 +28,7 @@ class TweetsController < ApplicationController
 
     respond_to do |format|
       if @tweet.save
-        AccountsTweet.where(:posted => nil).each do |a|
+        AccountsTweet.where(:tweet_id => @tweet.id).each do |a|
           a.post_tweet
         end
         format.html { redirect_to @tweet, notice: 'Tweet was successfully created.' }
@@ -45,6 +45,9 @@ class TweetsController < ApplicationController
   def update
     respond_to do |format|
       if @tweet.update(tweet_params)
+        AccountsTweet.where(:tweet_id => @tweet.id, :posted => nil).each do |a|
+          a.post_tweet
+        end
         format.html { redirect_to @tweet, notice: 'Tweet was successfully updated.' }
         format.json { head :no_content }
       else
@@ -65,13 +68,13 @@ class TweetsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_tweet
-      @tweet = Tweet.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_tweet
+    @tweet = Tweet.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def tweet_params
-      params.require(:tweet).permit(:status, :picture ,:account_ids => [])
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def tweet_params
+    params.require(:tweet).permit(:status, :picture, :account_ids => [])
+  end
 end

@@ -32,39 +32,18 @@ class AccountsController < ApplicationController
   # GET /accounts/1
   # GET /accounts/1.json
   def show
+
+    client = get_client(@account)
+    #scrape from latest celeb
+    @celeb = @account.celebrities.last
+
+    count = 0
+    follower_ids = client.follower_ids(@celeb.handle)
+    all_followers = Follower.all.pluck(:uid)
+
     begin
-      client = get_client(@account)
-      #scrape from latest celeb
-      @celeb = @account.celebrities.last
 
-      cursor = -1
-      count = 0
-      follower_ids = []
-      while cursor.to_i != 0 do
-        follower_ids = client.follower_ids(@celeb.handle, {:cursor => cursor})
-        if @celeb.handle == "GettyImages" and count < 3
-          count += 1
-          cursor = follower_ids.send(:next_cursor)
-          next
-        end
-        all_followers = Follower.all.pluck(:uid)
-        follower_ids.each do |f|
-          #make sure unique followers
-          next if all_followers.include? f
-
-          follower = Follower.new(:uid => f)
-          follower.save
-          AutoFollow.create(:follower_id => follower.id)
-          @celeb.followers << follower
-          count = count + 1
-          logger.debug count.to_s + " records"
-        end
-
-        #next set
-        logger.debug "NEXT SET==================>"
-        cursor = follower_ids.send(:next_cursor)
-      end
-        #follower_ids.to_a
+      follower_ids.to_a
 
     rescue Twitter::Error::TooManyRequests => error
 
@@ -74,9 +53,21 @@ class AccountsController < ApplicationController
       sleep error.rate_limit.reset_in + 1
       retry
     rescue => error
-
       logger.debug "error================>" + error.message
     end
+
+    follower_ids.each do |f|
+      #make sure unique followers
+      next if all_followers.include? f
+
+      follower = Follower.new(:uid => f)
+      follower.save
+      AutoFollow.create(:follower_id => follower.id)
+      @celeb.followers << follower
+      count = count + 1
+      logger.debug count.to_s + " records"
+    end
+
 
     logger.debug "finished==========>"
 
