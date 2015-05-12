@@ -5,13 +5,13 @@ class AccountsController < ApplicationController
   def callback
     account = Account.from_omniauth(env["omniauth.auth"])
     session[:user_id] = account.id
-    redirect_to root_url, :notice => "Signed in"
+    redirect_to "/celebrities", :notice => "Signed in"
   end
 
 
   def signout
     session[:user_id] = nil
-    redirect_to root_url, :notice => "Signed out"
+    redirect_to "/celebrities", :notice => "Signed out"
   end
 
   # GET /accounts
