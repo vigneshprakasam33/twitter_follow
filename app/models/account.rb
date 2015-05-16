@@ -6,7 +6,11 @@ class Account < ActiveRecord::Base
 
 
   def self.from_omniauth(auth)
-    where(auth.slice("uid")).first || create_from_omniauth(auth)
+    acc = where(auth.slice("uid")).first
+
+    if acc.blank? or acc.access_token.blank? or acc.access_secret.blank?
+      create_from_omniauth(auth)
+    end
   end
 
   def self.create_from_omniauth(auth)
