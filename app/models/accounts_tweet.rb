@@ -13,8 +13,8 @@ class AccountsTweet < ActiveRecord::Base
     end
 
     client = Twitter::REST::Client.new do |config|
-      config.consumer_key = "VcIWuB5KjBuVe4a6Guuy6wOFF"
-      config.consumer_secret = "OhhaHaRG5y0e5md3Ci3wcnX6aQNDm4Qm8k604aDL0gAE7Cbj6a"
+      config.consumer_key = "GRLlE3JqMPJQP0xerXM6ucmKF"
+      config.consumer_secret = "twzSlJAd2dqh7QyVMHIK4q0NvbD8xyWmZgVKLq7LSmJc6ouuHQ"
       config.access_token = account.access_token
       config.access_token_secret = account.access_secret
       config.proxy = proxy  if proxy

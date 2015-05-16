@@ -38,8 +38,8 @@ module Twitter
 
   #  auto attend
     $aa_client = Twitter::REST::Client.new do |config|
-      config.consumer_key        = "VcIWuB5KjBuVe4a6Guuy6wOFF"
-      config.consumer_secret     = "OhhaHaRG5y0e5md3Ci3wcnX6aQNDm4Qm8k604aDL0gAE7Cbj6a"
+      config.consumer_key        = "GRLlE3JqMPJQP0xerXM6ucmKF"
+      config.consumer_secret     = "twzSlJAd2dqh7QyVMHIK4q0NvbD8xyWmZgVKLq7LSmJc6ouuHQ"
       config.access_token        = "2939896867-Cj5trbDzoa4BKOCsS5nP2zxijOeseBKfYGC2XOV"
       config.access_token_secret = "56I5HhoNiClJASBQPIstnxbRxTM1VSILopduEHb8FG3Ti"
     end
