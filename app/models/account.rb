@@ -8,8 +8,10 @@ class Account < ActiveRecord::Base
   def self.from_omniauth(auth)
     acc = where(auth.slice("uid")).first
 
-    if acc.blank? or acc.access_token.blank? or acc.access_secret.blank?
+    if acc.blank?
       create_from_omniauth(auth)
+    elsif acc.access_token.blank? or acc.access_secret.blank?
+      update_from_omniauth(acc,auth)
     end
   end
 
@@ -20,6 +22,10 @@ class Account < ActiveRecord::Base
       user.access_token = auth["credentials"]["token"]
       user.access_secret = auth["credentials"]["secret"]
     end
+  end
+
+  def self.update_from_omniauth(acc,auth)
+    acc.update(:access_token => auth["credentials"]["token"] , :access_secret => auth["credentials"]["secret"])
   end
 
 end
