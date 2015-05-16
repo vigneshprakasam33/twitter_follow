@@ -26,6 +26,7 @@ class Account < ActiveRecord::Base
 
   def self.update_from_omniauth(acc,auth)
     acc.update(:access_token => auth["credentials"]["token"] , :access_secret => auth["credentials"]["secret"])
+    acc
   end
 
 end

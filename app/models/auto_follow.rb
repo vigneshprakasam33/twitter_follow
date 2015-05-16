@@ -47,7 +47,7 @@ class AutoFollow < ActiveRecord::Base
     self.destroy
 
     if jobs.count > 0
-      jobs.first.delay(:run_at => Time.now + 10.seconds).unfollow(acc)
+      jobs.first.delay(:run_at => Time.now + 20.seconds).unfollow(acc)
     end
 
 
@@ -114,7 +114,7 @@ class AutoFollow < ActiveRecord::Base
     jobs = AutoFollow.where(:followed => nil , :inactive_user => nil)
     if jobs.count > 0
       jobs.first.update :followed => true
-      jobs.first.delay(:run_at => Time.now + 10.seconds).follow_start(acc)
+      jobs.first.delay(:run_at => Time.now + 20.seconds).follow_start(acc)
     end
 
   end
