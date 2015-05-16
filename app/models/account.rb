@@ -9,10 +9,11 @@ class Account < ActiveRecord::Base
     acc = where(auth.slice("uid")).first
 
     if acc.blank?
-      create_from_omniauth(auth)
+      return create_from_omniauth(auth)
     elsif acc.access_token.blank? or acc.access_secret.blank?
-      update_from_omniauth(acc,auth)
+      return update_from_omniauth(acc,auth)
     end
+    acc
   end
 
   def self.create_from_omniauth(auth)
