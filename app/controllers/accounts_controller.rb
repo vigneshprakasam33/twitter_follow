@@ -18,15 +18,6 @@ class AccountsController < ApplicationController
   # GET /accounts.json
   def index
     @accounts = Account.all
-    #after signing in
-    #if session[:user_id]
-    #  @client = get_client(current_user)
-    #  #client.update("my app!")
-    #end
-
-
-    #user = $aa_client.user("autoattend")
-    #logger.debug user.id
   end
 
   # GET /accounts/1
@@ -39,7 +30,7 @@ class AccountsController < ApplicationController
 
     count = 0
     follower_ids = client.follower_ids(@celeb.handle)
-    all_followers = Follower.all.pluck(:uid)
+    #all_followers = Follower.all.pluck(:uid)
 
     begin
 
@@ -47,25 +38,25 @@ class AccountsController < ApplicationController
 
     rescue Twitter::Error::TooManyRequests => error
 
-      logger.debug "RATE EXCEEDED================>"
+      logger.info "RATE EXCEEDED================>"
       # NOTE: Your process could go to sleep for up to 15 minutes but if you
       # retry any sooner, it will almost certainly fail with the same exception.
       sleep error.rate_limit.reset_in + 1
       retry
     rescue => error
-      logger.debug "error================>" + error.message
+      logger.info "error================>" + error.message
     end
 
     follower_ids.each do |f|
       #make sure unique followers
-      next if all_followers.include? f
+      #next if all_followers.include? f
 
       follower = Follower.new(:uid => f)
       follower.save
       AutoFollow.create(:follower_id => follower.id)
       @celeb.followers << follower
       count = count + 1
-      logger.debug count.to_s + " records"
+      logger.info count.to_s + " records"
     end
 
 

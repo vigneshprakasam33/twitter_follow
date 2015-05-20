@@ -14,7 +14,6 @@ class AutoFollow < ActiveRecord::Base
     end
 
 
-
     client = Twitter::REST::Client.new do |config|
       config.consumer_key = "GRLlE3JqMPJQP0xerXM6ucmKF"
       config.consumer_secret = "twzSlJAd2dqh7QyVMHIK4q0NvbD8xyWmZgVKLq7LSmJc6ouuHQ"
@@ -43,7 +42,7 @@ class AutoFollow < ActiveRecord::Base
 
 
     #next job
-    jobs = self.account.auto_follows.where(:followed => true , :inactive_user => nil)
+    jobs = self.account.auto_follows.where(:followed => true, :inactive_user => nil)
     self.destroy
 
     if jobs.count > 0
@@ -66,7 +65,7 @@ class AutoFollow < ActiveRecord::Base
       config.consumer_secret = "twzSlJAd2dqh7QyVMHIK4q0NvbD8xyWmZgVKLq7LSmJc6ouuHQ"
       config.access_token = acc.access_token
       config.access_token_secret = acc.access_secret
-      config.proxy = proxy   if proxy
+      config.proxy = proxy if proxy
     end
 
     begin
@@ -108,13 +107,21 @@ class AutoFollow < ActiveRecord::Base
       #else
     end
 
-    self.update(:followed => true , :account_id => acc.id)
+    self.update(:followed => true, :account_id => acc.id)
 
     #next job
-    jobs = AutoFollow.where(:followed => nil , :inactive_user => nil)
+    jobs = AutoFollow.where(:followed => nil, :inactive_user => nil)
     if jobs.count > 0
+      u = client.user(acc.name)
       jobs.first.update :followed => true
-      jobs.first.delay(:run_at => Time.now + 20.seconds).follow_start(acc)
+
+      #if follow limit threshold is reached, start unfollowing
+      if u.friends_count < 1995
+        jobs.first.delay(:run_at => Time.now + 20.seconds).follow_start(acc)
+      else
+        jobs.first.delay(:run_at => Time.now + 20.seconds).unfollow(acc)
+      end
+
     end
 
   end
@@ -123,7 +130,7 @@ class AutoFollow < ActiveRecord::Base
   private
 
   def time_since_last_tweet(user)
-    (Date.current - user.tweet.created_at.to_date).to_i   rescue 1000
+    (Date.current - user.tweet.created_at.to_date).to_i rescue 1000
   end
 
 

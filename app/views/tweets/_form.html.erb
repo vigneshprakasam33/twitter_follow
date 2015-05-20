@@ -20,13 +20,33 @@
     <%= f.file_field :picture %>
   </div>
     <p>
+      <%= check_box_tag 'select_all', "select_all", false %>
+      <%= label_tag 'select_all', "Select All" %>
+      <br>
     <% Account.all.each do |account| %>
           <br>
-        <%= check_box_tag 'tweet[account_ids][]', account.id, @tweet.accounts.include?(account) %>
-        <%= label_tag :accounts_ids, account.name %>
+        <%= check_box_tag 'tweet[account_ids][]', account.id, @tweet.accounts.include?(account) , :class => "checkbox1" , :id => account.id %>
+        <%= label_tag account.id, account.name %>
     <% end %>
     </p>
   <div class="actions">
     <%= f.submit %>
   </div>
 <% end %>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#select_all').click(function(event) {  //on click
+            if(this.checked) { // check select status
+                $('.checkbox1').each(function() { //loop through each checkbox
+                    this.checked = true;  //select all checkboxes with class "checkbox1"
+                });
+            }else{
+                $('.checkbox1').each(function() { //loop through each checkbox
+                    this.checked = false; //deselect all checkboxes with class "checkbox1"
+                });
+            }
+        });
+
+    });
+</script>
