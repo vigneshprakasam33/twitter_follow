@@ -20,10 +20,17 @@ class AccountsTweet < ActiveRecord::Base
       config.proxy = proxy  if proxy
     end
 
-    client.update_with_media(self.tweet.status, open(self.tweet.picture.current_path))
+    if self.tweet.picture  and self.tweet.picture.current_path
+      #tweet with picture
+      client.update_with_media(self.tweet.status, open(self.tweet.picture.current_path))
+    else
+      #normal tweet
+      client.update(self.tweet.status)
+    end
+
     self.update :posted => true
 
-    logger.debug "Tweet posted=======>" + self.account.name
+    logger.info "Tweet posted=======>" + self.account.name
   end
   
   

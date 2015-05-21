@@ -119,6 +119,7 @@ class AutoFollow < ActiveRecord::Base
       if u.friends_count < 1995
         jobs.first.delay(:run_at => Time.now + 20.seconds).follow_start(acc)
       else
+        jobs = AutoFollow.where(:followed => true)
         jobs.first.delay(:run_at => Time.now + 20.seconds).unfollow(acc)
       end
 
