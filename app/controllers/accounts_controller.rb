@@ -11,7 +11,7 @@ class AccountsController < ApplicationController
 
   def signout
     session[:user_id] = nil
-    redirect_to "/celebrities", :notice => "Signed out"
+    redirect_to "/celebrities", :notice => "Signed out successfully"
   end
 
   # GET /accounts
