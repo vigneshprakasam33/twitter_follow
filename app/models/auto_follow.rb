@@ -46,7 +46,7 @@ class AutoFollow < ActiveRecord::Base
     self.destroy
 
     if jobs.count > 0
-      jobs.first.delay(:run_at => Time.now + 20.seconds).unfollow(acc)
+      jobs.first.delay(:run_at => Time.now + 18.seconds).unfollow(acc)
     end
 
 
@@ -117,10 +117,10 @@ class AutoFollow < ActiveRecord::Base
 
       #if follow limit threshold is reached, start unfollowing
       if u.friends_count < 1995
-        jobs.first.delay(:run_at => Time.now + 20.seconds).follow_start(acc)
+        jobs.first.delay(:run_at => Time.now + 18.seconds).follow_start(acc)
       else
         jobs = self.account.auto_follows.where(:followed => true, :inactive_user => nil)
-        jobs.first.delay(:run_at => Time.now + 20.seconds).unfollow(acc)
+        jobs.first.delay(:run_at => Time.now + 18.seconds).unfollow(acc)
       end
 
     end
