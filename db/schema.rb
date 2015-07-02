@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150509121155) do
+ActiveRecord::Schema.define(version: 20150614045254) do
 
   create_table "accounts", force: true do |t|
     t.string   "uid"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20150509121155) do
     t.datetime "updated_at"
     t.string   "access_token"
     t.string   "access_secret"
-    t.string   "proxy",         default: "173.44.219.155"
+    t.string   "proxy",         default: "50.2.15.102"
   end
 
   create_table "accounts_tweets", force: true do |t|
@@ -31,6 +31,21 @@ ActiveRecord::Schema.define(version: 20150509121155) do
     t.datetime "updated_at"
     t.boolean  "posted"
   end
+
+  create_table "active_admin_comments", force: true do |t|
+    t.string   "namespace"
+    t.text     "body"
+    t.string   "resource_id",   null: false
+    t.string   "resource_type", null: false
+    t.integer  "author_id"
+    t.string   "author_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
+  add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
+  add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
 
   create_table "auto_follows", force: true do |t|
     t.integer  "account_id"

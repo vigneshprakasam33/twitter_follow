@@ -6,6 +6,7 @@ class Account < ActiveRecord::Base
 
 
   def self.from_omniauth(auth)
+
     acc = where(auth.slice("uid")).first
 
     if acc.blank?
@@ -13,6 +14,8 @@ class Account < ActiveRecord::Base
     elsif acc.access_token.blank? or acc.access_secret.blank?
       return update_from_omniauth(acc,auth)
     end
+
+    logger.debug acc
     acc
   end
 

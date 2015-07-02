@@ -3,6 +3,7 @@ class AccountsController < ApplicationController
 
 
   def callback
+    logger.debug "IN callback==========>"
     account = Account.from_omniauth(env["omniauth.auth"])
     session[:user_id] = account.id
     redirect_to "/celebrities", :notice => "Signed in"
@@ -152,11 +153,13 @@ class AccountsController < ApplicationController
     end
 
     client = Twitter::REST::Client.new do |config|
-      config.consumer_key = "GRLlE3JqMPJQP0xerXM6ucmKF"
-      config.consumer_secret = "twzSlJAd2dqh7QyVMHIK4q0NvbD8xyWmZgVKLq7LSmJc6ouuHQ"
+      config.consumer_key = "fHD3Aicdej8kmbSNdmGKz8fMM"
+      config.consumer_secret = "iBEfLL5P15u47LfZThraEJRFoCFMgr0qDyJrgOhooqqPGMXpSd"
       config.access_token = user.access_token
       config.access_token_secret = user.access_secret
-      config.proxy = proxy if proxy
+      if proxy
+      config.proxy = proxy
+      end
     end
 
     client

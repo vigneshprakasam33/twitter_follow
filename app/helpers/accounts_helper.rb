@@ -8,8 +8,8 @@ module AccountsHelper
     end
 
     client = Twitter::REST::Client.new do |config|
-      config.consumer_key = "GRLlE3JqMPJQP0xerXM6ucmKF"
-      config.consumer_secret = "twzSlJAd2dqh7QyVMHIK4q0NvbD8xyWmZgVKLq7LSmJc6ouuHQ"
+      config.consumer_key = "fHD3Aicdej8kmbSNdmGKz8fMM"
+      config.consumer_secret = "iBEfLL5P15u47LfZThraEJRFoCFMgr0qDyJrgOhooqqPGMXpSd"
       config.access_token = user.access_token
       config.access_token_secret = user.access_secret
       config.proxy = proxy if proxy
